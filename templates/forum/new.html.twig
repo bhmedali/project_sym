@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Forum{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Create New Forum</h1>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                {{ include('forum/_form.html.twig') }}
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ path('app_forum_index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+{% endblock %}

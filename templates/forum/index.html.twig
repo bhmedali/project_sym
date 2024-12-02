@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum Index{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Forum Index</h1>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                {% if forums|length > 0 %}
+                    <div class="table-responsive w-75 mx-auto">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for forum in forums %}
+                                    <tr>
+                                        <td>{{ forum.id }}</td>
+                                        <td>{{ forum.title }}</td>
+                                        <td>
+                                            <a href="{{ path('app_forum_posts', {'id': forum.id}) }}" class="btn btn-primary btn-sm me-2">View Posts</a>
+                                            <a href="{{ path('app_forum_edit', {'id': forum.id}) }}" class="btn btn-warning btn-sm me-2">Edit</a>
+                                            <form method="post" action="{{ path('app_forum_delete', {'id': forum.id}) }}" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ forum.id) }}">
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning text-center" role="alert">
+                        No forums found. Why not create one?
+                    </div>
+                {% endif %}
+
+                <div class="text-center mt-4">
+                    <a href="{{ path('app_forum_new') }}" class="btn btn-success btn-lg">Create New Forum</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

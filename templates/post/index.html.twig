@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Posts for Forum: {{ forum.title }}{% endblock %}
+
+{% block body %}
+    <h1>Posts for Forum: {{ forum.title }}</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+            <tr>
+                <td>{{ post.id }}</td>
+                <td>{{ post.title }}</td>
+                <td>
+                    <a href="{{ path('app_post_show', {'forum_id': forum.id, 'id': post.id}) }}">Show</a>
+                    <a href="{{ path('app_post_edit', {'forum_id': forum.id, 'id': post.id}) }}">Edit</a>
+                    <form method="post" action="{{ path('app_post_delete', {'forum_id': forum.id, 'id': post.id}) }}" onsubmit="return confirm('Are you sure?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
+                        <button class="btn">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">No posts found for this forum</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_post_new', {'forum_id': forum.id}) }}">Create new post for this forum</a>
+    <br>
+    <a href="{{ path('app_forum_index') }}">Back to Forum List</a>
+{% endblock %}

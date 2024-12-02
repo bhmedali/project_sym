@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Post{% endblock %}
+
+{% block body %}
+    <h1>Post</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ post.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ post.title }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ post.content }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in post.comments %}
+            <li>
+                <!-- Inline Editing Form -->
+                <form action="{{ path('app_comment_edit', {'id': comment.id}) }}" method="POST">
+                    <textarea name="content" required>{{ comment.content }}</textarea>
+                    <input type="hidden" name="_token" value="{{ csrf_token('edit' ~ comment.id) }}">
+                    <button type="submit">Save</button>
+                </form>
+
+                <!-- Delete Button -->
+                <form action="{{ path('app_comment_delete', {'id': comment.id}) }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+            </li>
+        {% else %}
+            <li>No comments yet.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add New Comment Form -->
+    <h3>Add a Comment</h3>
+    <form action="{{ path('app_comment_new') }}" method="POST">
+        <textarea name="content" placeholder="Write a comment..." required></textarea>
+        <input type="hidden" name="post_id" value="{{ post.id }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('new_comment') }}">
+        <button type="submit">Comment</button>
+    </form>
+
+    <a href="{{ path('app_post_index', {'forum_id': post.getForum.id}) }}">Back to Post List</a>
+    <a href="{{ path('app_post_edit', {'forum_id': post.getForum.id, 'id': post.id}) }}">Edit Post</a>
+
+    {{ include('post/_delete_form.html.twig', {'forum_id': post.getForum.id}) }}
+{% endblock %}

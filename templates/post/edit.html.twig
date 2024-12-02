@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block title %}Edit Post{% endblock %}
+
+{% block body %}
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Update') }}</button>
+{{ form_end(form) }}
+
+<a href="{{ path('forum_show', {'id': post.getForum.id}) }}">Back to Forum</a>
+{% endblock %}
